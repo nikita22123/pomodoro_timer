@@ -23,8 +23,6 @@ $("#buttonPause").hide();
 buttonStart.addEventListener('click', function(event){
 	/*minutes--;
 	seconds--;*/
-	seconds = 59;
-	minutes--;
 	timeMinutes.textContent = minutes;
 	clearInterval(interval);
 	startTimer();
