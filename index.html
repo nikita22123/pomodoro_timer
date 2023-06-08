@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Pomodoro clock</title>
+	<link rel="stylesheet" href="style.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
+</head>
+<body>
+	<div class="timer">
+		<h2>
+			Pomodoro Timer
+		</h2>
+		<div class="timerOwn">
+			<div class="mainTime">
+				<div class="session">
+					<h2>
+						Session
+					</h2>
+					<div class="time">
+						<span class="timeMin">
+							25
+						</span>
+						<div class="delimiter">
+						<div class="poinTime1">
+							
+						</div>
+						<div class="poinTime2">
+							
+						</div>
+					</div>
+						<span class="timeSec">
+						00
+					</span>
+					</div>
+				</div>
+				<div class="sessionSettings">
+					<button id="buttonStart">
+						<span id="startIcon">▶</span>
+						<span id ="startText">Start</span>
+					</button>
+					<button id="buttonPause">
+						<span id="pauseIcon">=</span>
+						<span id ="pauseText">Pause</span>
+					</button>
+					<button id="buttonReset">
+						<span id="resetIcon">↻</span>
+						<span id="resetText">Reset</span>
+					</button>
+				</div>
+			</div>
+			<div class="timeSettings">
+				<div class="sesiaL">
+					<h3>Session Length</h3>
+					<div class="sesSettings">
+						<span class="arrowTopFirst" id="arrowTop">
+							🡻						
+						</span>
+						<span id="numberMin"> 
+						25
+					</span>
+					<span id="textMin">min</span>
+
+						<span class="arrowDownFirst"  id="arrowDown">
+							🡻
+						</span>
+					</div>
+				</div>
+				<div class="breakLength">
+					<h3>Break Length</h3>
+					<div class="breakSettings">
+						<span class="arrowTopSecond" id="arrowTop">
+							🡻	
+						</span>
+						<span id="numberMini">5</span>
+						<span id="textSec">min</span>
+						<span class = "arrowDownSecond" id="arrowDown">	🡻
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<script
+  src="https://code.jquery.com/jquery-3.7.0.js"
+  integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
+  crossorigin="anonymous"></script>
+<script src="script.js"></script>	
+</body>
+</html>
