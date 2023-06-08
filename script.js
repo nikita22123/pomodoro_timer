@@ -38,7 +38,7 @@ buttonPause.addEventListener('click', function(event){
 })
 buttonReset.addEventListener('click', function(event){
 	clearInterval(interval);
-	seconds = 0; 
+	seconds = 59;
 	timeMinutes.textContent = userSesValue;
 	if(seconds == 59){
 		timeSeconds.textContent = "00";
