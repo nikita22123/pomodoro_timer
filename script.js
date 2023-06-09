@@ -1,156 +1,188 @@
-const timeSeconds = document.querySelector('.timeSec');
 const timeMinutes = document.querySelector('.timeMin');
-let buttonStart = document.querySelector('#buttonStart');
-let buttonReset = document.querySelector('#buttonReset');
-let setMin = document.querySelector('.timeMin');
-let setSec = document.querySelector('.timeSec');
-let arrowTopFirst = document.querySelector('.arrowTopFirst');
-let arrowDownFirst = document.querySelector('.arrowDownFirst');
-let arrowTopSecond = document.querySelector('.arrowTopSecond');
-let arrowDownSecond = document.querySelector('.arrowDownSecond');
-let minutes = setMin.textContent;
-let seconds = setSec.textContent;
-let userSes = document.querySelector('#numberMin');
-let userBreak = document.querySelector('#numberMini');
-let userBreakValue = userBreak.textContent;
-let userSesValue = userSes.textContent;
+const timeSeconds = document.querySelector('.timeSec');
+const buttonStart = document.querySelector('#buttonStart');
+const buttonReset = document.querySelector('#buttonReset');
+const buttonPause = document.querySelector('#buttonPause');
+const userSes = document.querySelector('#numberMin');
+const userBreak = document.querySelector('#numberMini');
+const arrowTopFirst = document.querySelector('.arrowTopFirst');
+const arrowDownFirst = document.querySelector('.arrowDownFirst');
+const arrowTopSecond = document.querySelector('.arrowTopSecond');
+const arrowDownSecond = document.querySelector('.arrowDownSecond');
 let interval;
-let buttonPause = document.querySelector('#buttonPause');
-$("#buttonPause").hide();
+let isBreak = false;
+let isRunning = false;
+let minutes = parseInt(userSes.textContent);
+let seconds = 0;
+$('#buttonPause').hide();
+updateTimeDisplay();
 
-/*let allSec = 59;*/
-
-buttonStart.addEventListener('click', function(event){
-	/*minutes--;
-	seconds--;*/
-	timeMinutes.textContent = minutes;
-	clearInterval(interval);
-	startTimer();
-	interval = setInterval(startTimer,1000);
-	$("#buttonStart").hide();
-	$("#buttonPause").show();
-
+buttonStart.addEventListener('click', function () {
+  if (!isRunning) {
+    startTimer();
+    isRunning = true;
+     $('#buttonStart').hide();
+     $('#buttonPause').show();
+  } else {
+    pauseTimer();
+    isRunning = false;
+    $('#buttonStart').show();
+     $('#buttonPause').hide();
+  }
 });
-buttonPause.addEventListener('click', function(event){
-	$("#buttonStart").show();
-	$("#buttonPause").hide();
-	clearInterval(interval);
-})
-buttonReset.addEventListener('click', function(event){
-	clearInterval(interval);
-	seconds = 59;
-	timeMinutes.textContent = userSesValue;
-	if(seconds == 59){
-		timeSeconds.textContent = "00";
-	}
-	if(seconds < 10){
-		timeSeconds.textContent = "0" + seconds;
-	}
-	if(minutes < 10){
-		timeMinutes.textContent = "0" + minutes;
-	}
+buttonPause.addEventListener('click', function () {
+  if (isRunning) {
+    pauseTimer();
+    isRunning = false;
+    $('#buttonStart').show();
+     $('#buttonPause').hide();
+  }
+});
 
-	$("#buttonStart").show();
-	$("#buttonPause").hide();
+buttonReset.addEventListener('click', function () {
+  resetTimer();
+});
 
-})
- arrowTopFirst.addEventListener('click', function(event){
-	if(seconds < 58 && seconds == 0){
-	 userSesValue++;
-	 userSes.textContent = userSesValue;
-	 minutes++;
-	 timeMinutes.textContent = minutes;
-	}
-	 if(minutes < 10){
-	 	timeMinutes.textContent = "0" + minutes;
-	 }
-	 if(minutes > 98){
-	 	minutes = 98;
-	 }
-	 if(userSesValue > 98){
-	 	userSesValue = 98;
-	 }
-})
- arrowDownFirst.addEventListener('click', function(event){
-  	if(seconds < 58 && seconds == 0){
-	 userSesValue--;
-	 userSes.textContent = userSesValue;
-	 minutes--;
-	 timeMinutes.textContent = minutes;
-	}
-	 if(minutes < 10){
-	 	timeMinutes.textContent = "0" + minutes;
-	 }
-	 if(minutes < 2){
-	 	minutes = 2;
-	 }
-	 if(userSesValue < 2){
-	 	userSesValue = 2;
-	 }
-	 
+arrowTopFirst.addEventListener('click', function () {
+  if (!isRunning) {
+    incrementSessionTime();
+  }
+});
 
-})
-arrowDownSecond.addEventListener('click', function(event){
-	
-	if(seconds < 58 && seconds == 0){
-	 userBreakValue--;
-	 userBreak.textContent = userBreakValue;
-	}
-	if(userBreakValue < 2){
-	 	userBreakValue = 2;
-	 }
-})
-arrowTopSecond.addEventListener('click', function(event){
-	
-	if(seconds < 58 && seconds == 0){
-	 userBreakValue++;
-	 userBreak.textContent = userBreakValue;
-	}
-	if(userBreakValue > 29){
-	 	userBreakValue = 29;
-	 }
-})
+arrowDownFirst.addEventListener('click', function () {
+  if (!isRunning) {
+    decrementSessionTime();
+  }
+});
 
-function startTimer(){
-	if(seconds < 10){
-		timeSeconds.textContent = "0" + seconds;
-	}
-	if(minutes < 10){
-		timeMinutes.textContent = "0" + minutes;
-	}
-		if( seconds < 1 && minutes != 0){
-			minutes--;
-			timeMinutes.textContent = "0" + minutes;
-			seconds = 59;
-			timeSeconds.textContent = seconds;
-	}
+arrowTopSecond.addEventListener('click', function () {
+  if (!isRunning) {
+    incrementBreakTime();
+  }
+});
 
-	if(seconds > 9){
-	timeSeconds.textContent = seconds;
-	}
-	if(minutes > 9 ){
-		timeMinutes.textContent = minutes;
-	}
-	if(minutes == 0 && seconds == 0){
-		alert("ВРЕМЯ ВЫШЛО!");
-		clearInterval(interval);
-		timeMinutes.textContent =  "0" + userBreakValue;
+arrowDownSecond.addEventListener('click', function () {
+  if (!isRunning) {
+    decrementBreakTime();
+  }
+});
 
+function startTimer() {
+  interval = setInterval(function () {
+    if (seconds === 0 && minutes === 0) {
+      clearInterval(interval);
+      if (isBreak) {
+        alert('Break time is over!');
+        minutes = parseInt(userSes.textContent);
+        isBreak = false;
+      } else {
+        alert('Time is up!');
+        minutes = parseInt(userBreak.textContent);
+        isBreak = true;
+      }
+      seconds = 0;
+      updateTimeDisplay();
+      startTimer();
+    } else {
+      if (seconds === 0) {
+        minutes--;
+        seconds = 59;
+      } else {
+        seconds--;
+      }
+      updateTimeDisplay();
+    }
+  }, 1000);
 
-	}
-	if(seconds > 0 && seconds < 60 ){
-		seconds--;
-	}
-	/*	let newMin = minutes--;
-		timeMinutes.textContent = newMin;*/
-		/*let newOver = over--;
-		timeSeconds.textContent = newOver;*/
+   if (minutes === 0 && seconds === 0) {
+    openModal();
+  }
+}
 
-
-		
-	
+function pauseTimer() {
+  clearInterval(interval);
 
 }
 
+function resetTimer() {
+  clearInterval(interval);
+  minutes = parseInt(userSes.textContent);
+  seconds = 0;
+  isBreak = false;
+  isRunning = false;
+  $('#buttonStart').show();
+    $('#buttonPause').hide();
+  updateTimeDisplay();
+}
 
+function incrementSessionTime() {
+  minutes++;
+  userSes.textContent = minutes;
+  updateTimeDisplay();
+}
+
+function decrementSessionTime() {
+  if (minutes > 1) {
+    minutes--;
+    userSes.textContent = minutes;
+    updateTimeDisplay();
+  }
+}
+
+function incrementBreakTime() {
+  let breakTime = parseInt(userBreak.textContent);
+  if (breakTime < 30) {
+    breakTime++;
+    userBreak.textContent = breakTime;
+    if (isBreak) {
+      minutes = breakTime;
+      updateTimeDisplay();
+    }
+  }
+}
+
+function decrementBreakTime() {
+  let breakTime = parseInt(userBreak.textContent);
+  if (breakTime > 1) {
+    breakTime--;
+    userBreak.textContent = breakTime;
+    if (isBreak) {
+      minutes = breakTime;
+      updateTimeDisplay();
+    }
+  }
+}
+
+function updateTimeDisplay() {
+  let formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+  let formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
+  timeMinutes.textContent = formattedMinutes;
+  timeSeconds.textContent = formattedSeconds;
+}
+
+const modal = document.getElementById('myModal');
+const closeButton = document.getElementsByClassName('close')[0];
+const alarmSound = document.getElementById('alarmSound');
+
+// Открытие модального окна
+function openModal() {
+  modal.style.display = 'block';
+  alarmSound.play();
+}
+
+// Закрытие модального окна
+function closeModal() {
+  modal.style.display = 'none';
+  alarmSound.pause();
+}
+
+// Закрытие модального окна при клике на кнопку закрытия
+closeButton.addEventListener('click', closeModal);
+
+// Закрытие модального окна при клике вне окна
+window.addEventListener('click', function(event) {
+  if (event.target == modal) {
+    closeModal();
+  }
+});
 
